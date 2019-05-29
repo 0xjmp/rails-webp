@@ -9,10 +9,14 @@ module Rails
     class Error < StandardError; end
 
     class << self
-      attr_writer :encode_options, :force
+      attr_writer :encode_options, :exclude_dir_regex, :force
 
       def encode_options
         @encode_options ||= { quality: 80, lossless: true, method: 6, alpha_filtering: 2, alpha_compression: 0, alpha_quality: 100 }
+      end
+
+      def exclude_dir_regex
+        @exclude_dir_regex ||= nil
       end
 
       # Source assets that are unchanged will not be processed by default.
