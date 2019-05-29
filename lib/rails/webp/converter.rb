@@ -8,21 +8,6 @@ module Rails
       class << self
         attr_reader :context
 
-        def process(input_path, data, context)
-          @context = context
-          app = Rails.application
-          prefix = app.config.assets.prefix
-          digest = data_digest(data)
-          webp_file = webp_file_name(data, digest)
-          output_path = Pathname.new(File.join(app.root, 'public', prefix, webp_file))
-          if WebP.force || !webp_file_exists?(digest, output_path)
-            FileUtils.mkdir_p(output_path.dirname) unless Dir.exists?(output_path.dirname)
-            convert_to_webp(input_path, output_path)
-            logger.info "Writing #{output_path}"
-          end
-          data
-        end
-
         def convert_to_webp(input_path, output_path)
           # Ex: convert wizard.png -quality 50 -define webp:lossless=true wizard.webp
           MiniMagick::Tool::Convert.new do |convert|
@@ -34,6 +19,20 @@ module Rails
             end
             convert << output_path
           end
+        end
+
+        def process(input_path, data, context, app = Rails.application)
+          @context = context
+          prefix = app.config.assets.prefix
+          digest = data_digest(data)
+          webp_file = webp_file_name(data, digest)
+          output_path = Pathname.new(File.join(app.root, 'public', prefix, webp_file))
+          if WebP.force || !webp_file_exists?(digest, output_path)
+            FileUtils.mkdir_p(output_path.dirname) unless Dir.exists?(output_path.dirname)
+            convert_to_webp(input_path, output_path)
+            logger&.info "Writing #{output_path}"
+          end
+          data
         end
 
         private

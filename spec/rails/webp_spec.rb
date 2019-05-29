@@ -1,9 +1,15 @@
-RSpec.describe Rails::Webp do
-  it "has a version number" do
-    expect(Rails::Webp::VERSION).not_to be nil
+require 'spec_helper'
+
+RSpec.describe Rails::WebP do
+  describe '#encode_options' do
+    subject { described_class.encode_options }
+
+    it { is_expected.not_to be_nil }
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  describe '#force' do
+    subject { described_class.force }
+
+    it { is_expected.not_to be_nil }
   end
 end

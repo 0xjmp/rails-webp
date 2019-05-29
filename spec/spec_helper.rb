@@ -1,5 +1,12 @@
 require "bundler/setup"
+require 'rails/railtie'
 require "rails/webp"
+
+module RSpecHelpers
+  def is_expected_block
+    expect { subject }
+  end
+end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -11,4 +18,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.include RSpecHelpers
 end
