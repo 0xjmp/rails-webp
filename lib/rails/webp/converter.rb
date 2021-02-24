@@ -51,7 +51,7 @@ module Rails
 
         def webp_file_name(data, digest)
           file_name = context.logical_path # Original File name w/o extension
-          file_ext  = context.pathname.extname # Original File extension
+          file_ext  = File.extname(context.filename) # Original File extension
           "#{file_name}#{digest}.webp" # WebP File fullname
         end
 
